@@ -31,12 +31,22 @@ public class Sistema
 	/**
 	 * Metodo estático para instanciar por única vez Sistema
 	 * 
+	 * <b>Post: </b> Debe devolver una instancia del sistema no nula y en caso de
+	 * que ya exista una instancia la instancia no debe cambiar
+	 * 
 	 * @return devuelve la instancia de tipo Sistema
 	 */
 	public static Sistema getInstancia()
 	{
+		Sistema instanciaOld = instancia;
 		if (instancia == null)
 			instancia = new Sistema();
+
+		if (instanciaOld != null)
+		{
+			assert instancia == instanciaOld : "La instancia no debe cambiar";
+		}
+		assert instancia != null : "La instancia de sistema no debe ser null";
 		return instancia;
 	}
 
