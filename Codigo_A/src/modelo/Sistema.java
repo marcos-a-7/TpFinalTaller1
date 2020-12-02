@@ -1,9 +1,6 @@
 package modelo;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import excepciones.DomicilioInvalidoException;
 import excepciones.PersonaExistenteException;
