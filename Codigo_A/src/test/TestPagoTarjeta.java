@@ -13,14 +13,14 @@ public class TestPagoTarjeta {
 	public void porcentajeFisica() {
 		PagoTarjeta pagoTarjeta = new PagoTarjeta();
 		double porcentajeFisica = pagoTarjeta.porcentajeFisica();
-		Assert.assertEquals(1, porcentajeFisica, 0);
+		Assert.assertEquals(1, porcentajeFisica, 0.01);
 	}
 	
 	@Test
 	public void porcentajeJuridica() {
 		PagoTarjeta pagoTarjeta = new PagoTarjeta();
 		double porcentajeJuridica = pagoTarjeta.porcentajeJuridica();
-		Assert.assertEquals(1.20, porcentajeJuridica, 0);
+		Assert.assertEquals(1.20, porcentajeJuridica, 0.01);
 	}
 
 }
