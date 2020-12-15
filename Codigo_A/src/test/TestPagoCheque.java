@@ -1,35 +1,27 @@
 package test;
 
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
+import org.junit.Assert;
+import org.junit.Test;
 
 import mediospagos.PagoCheque;
 
 
 public class TestPagoCheque {
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
+	
 	@Test
 	public void testPorcentajeFisica() {
 		PagoCheque pagoCheque = new PagoCheque();
 		double porcentajeFisica = pagoCheque.porcentajeFisica();
-		Assert.assertEquals(1.10, porcentajeFisica);
+		Assert.assertEquals("El porcentaje para la persona fisica es correcto", 1.10, porcentajeFisica);
 	}
 	
 	@Test
 	public void porcentajeJuridica() {
 		PagoCheque pagoCheque = new PagoCheque();
+		double porcentajeJuridica = pagoCheque.porcentajeJuridica();
+		Assert.assertEquals("El porcentaje para la persona juridica es correcto", 1.15, porcentajeJuridica);
 	}
-
 }
