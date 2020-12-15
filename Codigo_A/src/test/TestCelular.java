@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class testContratableFactory
+public class TestCelular
 {
 
 	@Test
-	public void nuevoServicioConServicios()
+	public void testConstructor()
 	{
 		fail("Not yet implemented");
 	}
