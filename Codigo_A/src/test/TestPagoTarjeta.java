@@ -10,17 +10,17 @@ import mediospagos.PagoTarjeta;
 public class TestPagoTarjeta {
 
 	@Test
-	public void testPorcentajeFisica() {
+	public void porcentajeFisica() {
 		PagoTarjeta pagoTarjeta = new PagoTarjeta();
 		double porcentajeFisica = pagoTarjeta.porcentajeFisica();
-		Assert.assertEquals("El porcentaje para la persona fisica es correcto", 1, porcentajeFisica);
+		Assert.assertEquals(1, porcentajeFisica, 0);
 	}
 	
 	@Test
 	public void porcentajeJuridica() {
 		PagoTarjeta pagoTarjeta = new PagoTarjeta();
 		double porcentajeJuridica = pagoTarjeta.porcentajeJuridica();
-		Assert.assertEquals("El porcentaje para la persona juridica es correcto", 1.20, porcentajeJuridica);
+		Assert.assertEquals(1.20, porcentajeJuridica, 0);
 	}
 
 }
