@@ -66,7 +66,7 @@ public class TestDomicilioDepto
 	{
 		DomicilioDepto casa = new DomicilioDepto("Las Heras", 5000, 1, null);
 		Assert.assertEquals("La salida no coincide con la esperada",
-				"Domicilio: Las Heras 5000 PISO: 1 DEPARTAMENTO: null", casa.toString());
+				"Domicilio: Las Heras 5000 PISO: 1 DEPARTAMENTO: null ", casa.toString());
 
 	}
 
