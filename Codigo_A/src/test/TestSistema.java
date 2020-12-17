@@ -10,11 +10,21 @@ import personas.Fisica;
 import personas.Persona;
 
 import org.junit.Assert;
+import org.junit.Before;
+
 import servicios.Domicilio;
 import servicios.DomicilioCasa;
 
 public class TestSistema
 {
+
+	Sistema sistema = null;
+
+	@Before
+	public void setUp()
+	{
+		sistema = Sistema.getNewInstanceTest();
+	}
 
 	@Test
 	public void testGetInstancia()
@@ -26,7 +36,7 @@ public class TestSistema
 	@Test
 	public void testAgregarFacturas()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Jorge", 50314328);
 		sistema.agregarFacturas(persona);
 		Assert.assertEquals("No se cargo correctamente la persona",
@@ -40,7 +50,7 @@ public class TestSistema
 	@Test
 	public void testAgregarServicioCaso1()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Juan", 1515);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
@@ -52,7 +62,7 @@ public class TestSistema
 	@Test
 	public void testAgregarServicioCaso2()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Juan", 1515);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
@@ -65,7 +75,7 @@ public class TestSistema
 	@Test
 	public void testAgregarServicioCaso3()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Juan", 1515);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
@@ -78,7 +88,7 @@ public class TestSistema
 	@Test
 	public void testAgregarServicioCaso4()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Juan", 1515);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
@@ -93,7 +103,7 @@ public class TestSistema
 	@Test
 	public void testAgregarServicioCaso5()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Juan", 1515);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
@@ -106,7 +116,7 @@ public class TestSistema
 	@Test
 	public void testModificarAgregado()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Pedro", 1010);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
@@ -120,7 +130,7 @@ public class TestSistema
 	@Test
 	public void testAbonar()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		PagoCheque pago = new PagoCheque();
 
 		Persona persona = new Fisica("Cacho", 1515);
@@ -139,7 +149,7 @@ public class TestSistema
 	@Test
 	public void testDuplicarFactura()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona personaJuridica = new Fisica("Marcelo", 50314328);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
 		sistema.agregarFacturas(personaJuridica);
@@ -168,7 +178,7 @@ public class TestSistema
 	@Test
 	public void testListarFacturaSinContrataciones()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Marcos", 15);
 		sistema.agregarFacturas(persona);
 		Assert.assertEquals("No se realiza correctamente el listar factura con persona",
@@ -180,7 +190,7 @@ public class TestSistema
 	@Test
 	public void testListarFacturaConContrataciones()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		Persona persona = new Fisica("Matias", 1515);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
@@ -199,7 +209,7 @@ public class TestSistema
 	@Test
 	public void testListarFacturas()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		System.out.println("------------" + sistema.listarFacturas());
 		Assert.assertEquals("No se realiza correctamente el listar facturas",
 				"FACTURAS:\n" + "Persona fisica Nombre= Cacho DNI=1515\n" + "Lista de contrataciones: \n"

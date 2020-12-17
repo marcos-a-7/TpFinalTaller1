@@ -29,6 +29,17 @@ public class Sistema
 	}
 
 	/**
+	 * Metodo que solo debe ser usado para test
+	 * 
+	 * @return nueva instancia del sistema
+	 */
+	@TestPurpose
+	public static Sistema getNewInstanceTest()
+	{
+		return new Sistema();
+	}
+	
+	/**
 	 * Metodo estático para instanciar por única vez Sistema
 	 * 
 	 * <b>Post: </b> Debe devolver una instancia del sistema no nula y en caso de

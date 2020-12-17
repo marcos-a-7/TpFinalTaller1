@@ -26,6 +26,18 @@ public class Sistema
 	 */
 	private Sistema()
 	{
+
+	}
+
+	/**
+	 * Metodo que solo debe ser usado para test
+	 * 
+	 * @return nueva instancia del sistema
+	 */
+	@TestPurpose
+	public static Sistema getNewInstanceTest()
+	{
+		return new Sistema();
 	}
 
 	/**

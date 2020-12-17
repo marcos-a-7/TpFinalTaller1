@@ -19,11 +19,24 @@ import servicios.DomicilioCasa;
 
 public class TestSistema
 {
+	Sistema sistema = null;
 
-	Sistema sistema = Sistema.getInstancia();
+	@Before
+	public void setUp()
+	{
+		sistema = Sistema.getNewInstanceTest();
+	}
 
 	@Test
 	public void testGetInstancia()
+	{
+		Sistema.getInstancia();
+		Sistema sistema = Sistema.getInstancia();
+		Assert.assertEquals("El sistema no se creo correctamente", sistema, Sistema.getInstancia());
+	}
+
+	@Test
+	public void testGetInstanciaNull()
 	{
 		Sistema sistema = Sistema.getInstancia();
 		Assert.assertEquals("El sistema no se creo correctamente", sistema, Sistema.getInstancia());
