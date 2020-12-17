@@ -154,7 +154,7 @@ public class TestSistema
 		sistema.agregarFacturas(persona);
 
 		sistema.duplicarFactura("Ricardo");
-		fail("No hay forma de comprobar que el metodo genera un clone de la facutra dado que no lo devuelve solo imprime en consola");
+		fail("No hay forma de comprobar que el metodo genera un clone de la factura dado que no lo devuelve solo imprime en consola");
 	}
 
 	@Test
