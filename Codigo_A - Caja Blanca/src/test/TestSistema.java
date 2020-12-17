@@ -5,16 +5,22 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import mediospagos.PagoCheque;
+import mediospagos.PagoEfectivo;
 import modelo.Sistema;
 import personas.Fisica;
+import personas.Juridica;
 import personas.Persona;
 
 import org.junit.Assert;
+import org.junit.Before;
+
 import servicios.Domicilio;
 import servicios.DomicilioCasa;
 
 public class TestSistema
 {
+
+	Sistema sistema = Sistema.getInstancia();
 
 	@Test
 	public void testGetInstancia()
@@ -24,81 +30,70 @@ public class TestSistema
 	}
 
 	@Test
-	public void testAgregarFacturas()
+	public void testAgregarFacturasNoRepetida()
 	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Jorge", 50314328);
+
+		Persona persona = new Fisica("Ezequiel", 1);
 		sistema.agregarFacturas(persona);
+
 		Assert.assertEquals("No se cargo correctamente la persona",
-				"Persona fisica Nombre= Jorge DNI=50314328\n\n-->PRECIO TOTAL: 0.0\n\n",
-				sistema.listarFactura("Jorge"));
+				"Persona fisica Nombre= Ezequiel DNI=1\n\n-->PRECIO TOTAL: 0.0\n\n", sistema.listarFactura("Ezequiel"));
+	}
+
+	@Test
+	public void testAgregarFacturasRepetida()
+	{
+
+		Persona persona = new Fisica("Juan", 1);
 		sistema.agregarFacturas(persona);
+
+		String listaFacturasOld = sistema.listarFacturas();
+		sistema.agregarFacturas(persona);
+		Assert.assertEquals("No deberia modificarse ninguna factura en el sistema", listaFacturasOld,
+				sistema.listarFacturas());
+
 		fail("Nunca se lanza la excepcion PersonaExistenteException");
-
 	}
 
 	@Test
-	public void testAgregarServicioCaso1()
+	public void testAgregarServicioCorrecto()
 	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Juan", 1515);
+
+		Persona persona = new Fisica("Jorge", 1515);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
-		sistema.agregarServicio("Juan", null, 0, 0, 0, domicilio);
+
+		sistema.agregarServicio("Jorge", "Internet100", 0, 0, 0, domicilio);
+		Assert.assertEquals("No se cargo correctamente la persona", "Persona fisica Nombre= Jorge DNI=1515\n"
+				+ "ID: 1 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n\n" + "-->PRECIO TOTAL: 850.0\n\n",
+				sistema.listarFactura("Jorge"));
+	}
+
+	@Test
+	public void testAgregarServicioConServicioIncorrecto()
+	{
+
+		Persona persona = new Fisica("Jorge", 1515);
+		sistema.agregarFacturas(persona);
+		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
+
+		String facturaOld = sistema.listarFactura("Jorge");
+		sistema.agregarServicio("Jorge", "Internet300", 0, 0, 0, domicilio);
+		Assert.assertEquals("No deberia modificarse la factura", facturaOld, sistema.listarFactura("Jorge"));
 
 		fail("Nunca lanza las excepciones correspondientes segun la documentacion");
 	}
 
 	@Test
-	public void testAgregarServicioCaso2()
+	public void testAgregarServicioConDomicilioNull()
 	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Juan", 1515);
+
+		Persona persona = new Fisica("Jorge", 1515);
 		sistema.agregarFacturas(persona);
-		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
 
-		sistema.agregarServicio("Juan", "", 0, 0, 0, domicilio);
-
-		fail("Nunca lanza las excepciones correspondientes segun la documentacion");
-	}
-
-	@Test
-	public void testAgregarServicioCaso3()
-	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Juan", 1515);
-		sistema.agregarFacturas(persona);
-		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
-
-		sistema.agregarServicio("Juan", "internete", 0, 0, 0, domicilio);
-
-		fail("Nunca lanza las excepciones correspondientes segun la documentacion");
-	}
-
-	@Test
-	public void testAgregarServicioCaso4()
-	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Juan", 1515);
-		sistema.agregarFacturas(persona);
-		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
-
-		sistema.agregarServicio("Juan", "Internet100", 0, 0, 0, domicilio);
-		Assert.assertEquals("No se cargo correctamente la persona", "Persona fisica Nombre= Juan DNI=1515\n"
-				+ "ID: 3 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n\n" + "-->PRECIO TOTAL: 850.0\n\n",
-				sistema.listarFactura("Juan"));
-
-	}
-
-	@Test
-	public void testAgregarServicioCaso5()
-	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Juan", 1515);
-		sistema.agregarFacturas(persona);
-		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
-
-		sistema.agregarServicio("Juan", "Internet100", 0, 0, 0, domicilio);
+		String facturaOld = sistema.listarFactura("Jorge");
+		sistema.agregarServicio("Jorge", "Internet100", 0, 0, 0, null);
+		Assert.assertEquals("No deberia modificarse la factura", facturaOld, sistema.listarFactura("Jorge"));
 
 		fail("Nunca lanza las excepciones correspondientes segun la documentacion");
 	}
@@ -106,120 +101,140 @@ public class TestSistema
 	@Test
 	public void testModificarAgregado()
 	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Pedro", 1010);
+
+		Persona persona = new Fisica("Rodrigo", 1010);
 		sistema.agregarFacturas(persona);
-		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
-		sistema.agregarServicio("Pedro", "Internet100", 0, 0, 0, domicilio);
-		sistema.modificarAgregado("Pedro", "Las Heras", "CAMBIAR", "Internet500");
-		Assert.assertEquals("No se cargo correctamente la persona", "Persona fisica Nombre= Pedro DNI=1010\n"
-				+ "ID: 6 Domicilio: Colon 1500 SERVICIO== INTERNET500: $1000 \n\n" + "-->PRECIO TOTAL: 1000.0\n\n",
-				sistema.listarFactura("Pedro"));
+		Domicilio domicilio = new DomicilioCasa("Luro", 1500);
+		sistema.agregarServicio("Rodrigo", "Internet500", 0, 0, 0, domicilio);
+
+		sistema.modificarAgregado("Rodrigo", "Luro 1500", "CAMBIAR", "Internet100");
+		Assert.assertEquals("No se cargo correctamente la persona",
+				"Persona fisica Nombre= Rodrigo DNI=1010\n"
+						+ "ID: 5 Domicilio: Luro 1500 SERVICIO== INTERNET100: $850 \n\n" + "-->PRECIO TOTAL: 850.0\n\n",
+				sistema.listarFactura("Rodrigo"));
 	}
 
 	@Test
 	public void testAbonar()
 	{
-		Sistema sistema = Sistema.getInstancia();
+
 		PagoCheque pago = new PagoCheque();
 
-		Persona persona = new Fisica("Cacho", 1515);
+		Persona persona = new Fisica("Lucas", 1515);
 		sistema.agregarFacturas(persona);
 		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
 
-		sistema.agregarServicio("Cacho", "Internet100", 0, 0, 0, domicilio);
-		sistema.abonar("Cacho", pago);
+		sistema.agregarServicio("Lucas", "Internet100", 0, 0, 0, domicilio);
+		sistema.abonar("Lucas", pago);
 		Assert.assertEquals("No se cargo el abonar correctamente",
-				"Persona fisica Nombre= Cacho DNI=1515\n"
-						+ "ID: 7 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n\n"
+				"Persona fisica Nombre= Lucas DNI=1515\n"
+						+ "ID: 8 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n\n"
 						+ "-->PRECIO TOTAL: 935.0000000000001\n\n",
-				sistema.listarFactura("Cacho"));
+				sistema.listarFactura("Lucas"));
 	}
 
 	@Test
-	public void testDuplicarFactura()
+	public void testDuplicarFacturaFisica()
 	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona personaJuridica = new Fisica("Marcelo", 50314328);
-		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
-		sistema.agregarFacturas(personaJuridica);
-		sistema.agregarServicio("Marcelo", "Internet100", 0, 0, 0, domicilio);
-		sistema.duplicarFactura("Marcelo");
-		fail("El metodo no devuelve la nueva instancia de factura y la clase no cuenta con ningun metodo que permita comprobar si la clono correctamente");
-	}
 
-	@Test
-	public void testEliminarContratacion()
-	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Rodrigo", 100);
-		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
-		Domicilio domicilio2 = new DomicilioCasa("Luro", 1500);
+		Persona persona = new Fisica("Ricardo", 50314328);
 		sistema.agregarFacturas(persona);
-		sistema.agregarServicio("Rodrigo", "Internet100", 0, 0, 0, domicilio);
-		sistema.agregarServicio("Rodrigo", "Internet100", 0, 0, 0, domicilio2);
-		sistema.eliminarContratacion("Rodrigo", "Luro 1500");
-		Assert.assertEquals("No se elimina correctamente la contratacion", "Persona fisica Nombre= Rodrigo DNI=100\n"
-				+ "ID: 2 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n" + "\n" + "-->PRECIO TOTAL: 850.0\n\n",
-				sistema.listarFactura("Rodrigo"));
 
+		sistema.duplicarFactura("Ricardo");
+		fail("No hay forma de comprobar que el metodo genera un clone de la facutra dado que no lo devuelve solo imprime en consola");
 	}
 
 	@Test
-	public void testListarFacturaSinContrataciones()
+	public void testDuplicarFacturaJuridica()
 	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Marcos", 15);
-		sistema.agregarFacturas(persona);
-		Assert.assertEquals("No se realiza correctamente el listar factura con persona",
-				"Persona fisica Nombre= Marcos DNI=15\n\n" + "-->PRECIO TOTAL: 0.0\n\n",
-				sistema.listarFactura("Marcos"));
 
+		Persona persona = new Juridica("Pablo", 50314328);
+		sistema.agregarFacturas(persona);
+
+		sistema.duplicarFactura("Pablo");
+		fail("El metodo no lanza una excepcion CloneNotSupportedException");
 	}
 
 	@Test
-	public void testListarFacturaConContrataciones()
+	public void testEliminarContratacionPersonaConDosContrataciones()
 	{
-		Sistema sistema = Sistema.getInstancia();
-		Persona persona = new Fisica("Matias", 1515);
-		sistema.agregarFacturas(persona);
-		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
 
+		Persona persona = new Fisica("Matias", 100);
+		Domicilio domicilio = new DomicilioCasa("Roca", 100);
+		Domicilio domicilio2 = new DomicilioCasa("Malvinas", 200);
+		sistema.agregarFacturas(persona);
 		sistema.agregarServicio("Matias", "Internet100", 0, 0, 0, domicilio);
-
-		Assert.assertEquals("No se realiza correctamente el listar factura con persona",
-				"Persona fisica Nombre= Matias DNI=1515\n"
-						+ "ID: 6 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n\n"
-
-						+ "-->PRECIO TOTAL: 850.0\n\n",
+		sistema.agregarServicio("Matias", "Internet100", 0, 0, 0, domicilio2);
+		sistema.eliminarContratacion("Matias", "Roca 100");
+		Assert.assertEquals("No se elimina correctamente la contratacion", "Persona fisica Nombre= Matias DNI=100\n"
+				+ "ID: 6 Domicilio: Malvinas 200 SERVICIO== INTERNET100: $850 \n" + "\n" + "-->PRECIO TOTAL: 850.0\n\n",
 				sistema.listarFactura("Matias"));
 
 	}
 
 	@Test
-	public void testListarFacturas()
+	public void testEliminarContratacionPersonaNoExistente()
+	{
+
+		String facturasOld = sistema.listarFacturas();
+		sistema.eliminarContratacion("Valentina", "Las Heras 500");
+		Assert.assertEquals("No deberian cambiar las facturas del sistema", facturasOld, sistema.listarFacturas());
+
+	}
+
+	@Test
+	public void testEliminarContratacionPersonaSinContrataciones()
+	{
+		sistema.agregarFacturas(new Fisica("Demian", 10));
+
+		String facturasOld = sistema.listarFacturas();
+		sistema.eliminarContratacion("Demian", "Las Heras 500");
+		Assert.assertEquals("No deberian cambiar las facturas del sistema", facturasOld, sistema.listarFacturas());
+
+	}
+
+	@Test
+	public void testEliminarContratacionPersonaConUnaContratacion()
+	{
+		sistema.agregarFacturas(new Fisica("Marcos", 10));
+		sistema.agregarServicio("Marcos", "Internet100", 0, 0, 0, new DomicilioCasa("9 de julio", 500));
+		String facturasOld = sistema.listarFacturas();
+
+		sistema.eliminarContratacion("Marcos", "9 de julio 500");
+		Assert.assertNotEquals("Deberia eliminarse una factura", facturasOld, sistema.listarFacturas());
+
+	}
+
+	@Test
+	public void testListarFacturaConDescuento()
 	{
 		Sistema sistema = Sistema.getInstancia();
-		System.out.println("------------" + sistema.listarFacturas());
-		Assert.assertEquals("No se realiza correctamente el listar facturas",
-				"FACTURAS:\n" + "Persona fisica Nombre= Cacho DNI=1515\n" + "Lista de contrataciones: \n"
-						+ "ID: 8 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n" + "\n" + "\n"
-						+ "--> PRECIO TOTAL: 935.0000000000001\n" + "\n" + "Persona fisica Nombre= Marcos DNI=15\n"
-						+ "Lista de contrataciones: \n" + "\n" + "\n" + "--> PRECIO TOTAL: 0.0\n" + "\n"
-						+ "Persona fisica Nombre= Rodrigo DNI=100\n" + "Lista de contrataciones: \n"
-						+ "ID: 2 Domicilio: Luro 1500 SERVICIO== INTERNET100: $850 \n" + "\n" + "\n"
-						+ "--> PRECIO TOTAL: 850.0\n" + "\n" + "Persona fisica Nombre= Marcelo DNI=50314328\n"
-						+ "Lista de contrataciones: \n" + "ID: 5 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n"
-						+ "\n" + "\n" + "--> PRECIO TOTAL: 850.0\n" + "\n" + "Persona fisica Nombre= Matias DNI=1515\n"
-						+ "Lista de contrataciones: \n" + "ID: 6 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n"
-						+ "\n" + "\n" + "--> PRECIO TOTAL: 850.0\n" + "\n" + "Persona fisica Nombre= Pedro DNI=1010\n"
-						+ "Lista de contrataciones: \n" + "ID: 7 Domicilio: Colon 1500 SERVICIO== INTERNET500: $1000 \n"
-						+ "\n" + "\n" + "--> PRECIO TOTAL: 1000.0\n" + "\n" + "Persona fisica Nombre= Juan DNI=1515\n"
-						+ "Lista de contrataciones: \n" + "ID: 3 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n"
-						+ "ID: 4 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n" + "\n" + "\n"
-						+ "--> PRECIO TOTAL: 850.0\n" + "\n" + "Persona fisica Nombre= Jorge DNI=50314328\n"
-						+ "Lista de contrataciones: \n" + "\n" + "\n" + "--> PRECIO TOTAL: 0.0\n\n",
-				sistema.listarFacturas());
+		Persona persona = new Fisica("Luciano", 15);
+		sistema.agregarFacturas(persona);
+		sistema.agregarServicio("Luciano", "Internet100", 0, 0, 0, new DomicilioCasa("9 de julio", 500));
+		sistema.abonar("Luciano", new PagoEfectivo());
+
+		Assert.assertEquals("No se realiza correctamente el listar factura",
+				"Persona fisica Nombre= Luciano DNI=15\n"
+						+ "ID: 3 Domicilio: 9 de julio 500 SERVICIO== INTERNET100: $850 \n" + "\n"
+						+ "-->PRECIO TOTAL SIN DESCUENTO: 850.0\n" + "\n" + "\n"
+						+ "-->PRECIO TOTAL CON DESCUENTO: 680.0\n" + "\n",
+				sistema.listarFactura("Luciano"));
+	}
+
+	@Test
+	public void testListarFacturaSinDescuento()
+	{
+		Sistema sistema = Sistema.getInstancia();
+		Persona persona = new Juridica("Julian", 15);
+		sistema.agregarFacturas(persona);
+		sistema.agregarServicio("Julian", "Internet100", 0, 0, 0, new DomicilioCasa("9 de julio", 500));
+		sistema.abonar("Julian", new PagoCheque());
+		Assert.assertEquals("No se realiza correctamente el listar factura con persona",
+				"Persona Juridica Nombre= Julian CUIT=15\n"
+						+ "ID: 2 Domicilio: 9 de julio 500 SERVICIO== INTERNET100: $850 \n" + "\n"
+						+ "-->PRECIO TOTAL: 977.4999999999999\n" + "\n",
+				sistema.listarFactura("Julian"));
 	}
 
 }
