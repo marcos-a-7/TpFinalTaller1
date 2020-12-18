@@ -16,18 +16,21 @@ import servicios.DomicilioCasa;
 import servicios.Factura;
 import servicios.Internet100;
 
-public class TestFacturaConContrataciones {
+public class TestFacturaConContrataciones
+{
 
 	private Factura factura;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception
+	{
 		EscenarioFacturaConContrataciones escenario = new EscenarioFacturaConContrataciones();
 		factura = escenario.getFactura();
 	}
 
 	@Test
-	public void testConstructorPersonaNula() {
+	public void testConstructorPersonaNula()
+	{
 		Fisica persona = null;
 		Factura factura = new Factura(persona);
 		ArrayList<I_Contratable> arrayList = factura.getListaContrataciones();
@@ -41,7 +44,8 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testConstructorPersonaNoNula() {
+	public void testConstructorPersonaNoNula()
+	{
 		Fisica persona = new Fisica("Jorge", 6);
 		Factura factura = new Factura(persona);
 		ArrayList<I_Contratable> arrayList = factura.getListaContrataciones();
@@ -55,7 +59,8 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testNuevaContratacion() {
+	public void testNuevaContratacion()
+	{
 		I_Contratable contratable = new Internet100(new DomicilioCasa("nombre de la calle", 100));
 		this.factura.nuevaContratacion(contratable);
 		Assert.assertEquals("No se contrata el servicio esperado", true,
@@ -63,35 +68,44 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testbuscaContratacion() {
+	public void testbuscaContratacion()
+	{
 		Assert.assertEquals("No busca bien una contratacion en la lista de contrataciones", 1,
 				this.factura.buscaContratacion("calle5 104"));
 	}
 
 	@Test
-	public void testModificaContratacionPosNegativa() {
-		Assert.fail("El metodo no funciona con pos < 0");
-		;
-		// El método no funciona con los siguientes parámetros
+	public void testModificaContratacionPosNegativa()
+	{
+		int cantidad = this.factura.getListaContrataciones().size();
+
 		this.factura.modificaContratacion(-1, "QUITAR", "TVCABLE");
+
+		Assert.assertEquals("No deberia modificar nada", cantidad, this.factura.getListaContrataciones().size());
 	}
 
 	@Test
-	public void testModificaContratacion_PosMayorALaCantidadDeContrataciones() {
-		Assert.fail("El metodo no funciona con pos > cantidad de contrataciones");
-		// El método no funciona con los siguientes parámetros
+	public void testModificaContratacion_PosMayorALaCantidadDeContrataciones()
+	{
+		int cantidad = this.factura.getListaContrataciones().size();
+
 		this.factura.modificaContratacion(32000, "QUITAR", "TVCABLE");
+
+		Assert.assertEquals("No deberia modificar nada", cantidad, this.factura.getListaContrataciones().size());
 	}
 
 	@Test
-	public void testModificaContratacionAccionNula() {
-		Assert.fail("El metodo no funciona con accion=null");
-		// El método no funciona con los siguientes parámetros
+	public void testModificaContratacionAccionNula()
+	{
+		int cantidad = this.factura.getListaContrataciones().size();
 		this.factura.modificaContratacion(3, null, "TVCABLE");
+
+		Assert.assertEquals("No deberia modificar nada", cantidad, this.factura.getListaContrataciones().size());
 	}
 
 	@Test
-	public void testModificaContratacionAccionVacia() {
+	public void testModificaContratacionAccionVacia()
+	{
 		int cantidad = this.factura.getListaContrataciones().size();
 		this.factura.modificaContratacion(2, "", "TVCABLE");
 		if (cantidad == this.factura.getListaContrataciones().size())
@@ -99,14 +113,17 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testModificaContratacionServicioNull() {
-		Assert.fail("El metodo no funciona con servicio=null");
-		// El método no funciona con los siguientes parámetros
+	public void testModificaContratacionServicioNull()
+	{
+		int cantidad = this.factura.getListaContrataciones().size();
 		this.factura.modificaContratacion(3, "QUITAR", null);
+
+		Assert.assertEquals("No deberia modificar nada", cantidad, this.factura.getListaContrataciones().size());
 	}
 
 	@Test
-	public void testModificaContratacionServicioVacio() {
+	public void testModificaContratacionServicioVacio()
+	{
 		int cantidad = this.factura.getListaContrataciones().size();
 		this.factura.modificaContratacion(2, "QUITAR", "");
 		if (cantidad == this.factura.getListaContrataciones().size())
@@ -114,7 +131,8 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testModificaContratacionCorrecta() {
+	public void testModificaContratacionCorrecta()
+	{
 		int cantidad = this.factura.getListaContrataciones().size();
 		this.factura.modificaContratacion(2, "QUITAR", "TVCABLE");
 		if (cantidad == this.factura.getListaContrataciones().size())
@@ -122,7 +140,8 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testEliminaContratacion() {
+	public void testEliminaContratacion()
+	{
 		int cantidad = this.factura.getListaContrataciones().size();
 		this.factura.eliminaContratacion(2);
 		if (cantidad == this.factura.getListaContrataciones().size())
@@ -130,7 +149,8 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testPrecioFinal() {
+	public void testPrecioFinal()
+	{
 		int cantidad = this.factura.getListaContrataciones().size();
 		Persona persona = this.factura.getPersona();
 		I_Pago tipo = new PagoCheque();
@@ -140,33 +160,40 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testClonePosible() {
+	public void testClonePosible()
+	{
 		Fisica persona = new Fisica("Jorge", 6);
 		Factura factura = new Factura(persona);
-		try {
+		try
+		{
 			@SuppressWarnings("unused")
 			Factura clonFactura = (Factura) factura.clone();
-		} catch (CloneNotSupportedException e) {
+		} catch (CloneNotSupportedException e)
+		{
 			Assert.fail("No deberia lanzar excepcion de tipo CloneNotSupportedException");
 		}
 	}
 
 	@Test
-	public void testCloneImposible() {
+	public void testCloneImposible()
+	{
 		Juridica persona = new Juridica("Jorge", 6);
 		Factura factura = new Factura(persona);
-		try {
+		try
+		{
 			@SuppressWarnings("unused")
 			Factura clonFactura = (Factura) factura.clone();
 			Assert.fail("Deberia lanzar excepcion de tipo CloneNotSupportedException");
-		} catch (CloneNotSupportedException e) {
+		} catch (CloneNotSupportedException e)
+		{
 
 		}
 
 	}
 
 	@Test
-	public void testListarContrataciones() {
+	public void testListarContrataciones()
+	{
 		Assert.assertEquals("No se listan correctamente las contrataciones",
 				"ID: 27 Domicilio: calle4 103 SERVICIO== INTERNET500: $1000 \n"
 						+ "ID: 28 Domicilio: calle5 104 SERVICIO== INTERNET100: $850 \n"
@@ -175,9 +202,11 @@ public class TestFacturaConContrataciones {
 	}
 
 	@Test
-	public void testActualizaPrecio() {
-		//Como la documentación no es suficiente para testear el método, se tuvo que leer el código
-		//aunque esto no sea lo correcto
+	public void testActualizaPrecio()
+	{
+		// Como la documentación no es suficiente para testear el método, se tuvo que
+		// leer el código
+		// aunque esto no sea lo correcto
 		this.factura.actualizaPrecio();
 		if (this.factura.getTotalConP() == 0)
 			Assert.fail("No se actualiza el precio correctamente");

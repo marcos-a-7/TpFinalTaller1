@@ -19,11 +19,24 @@ import servicios.DomicilioCasa;
 
 public class TestSistema
 {
+	Sistema sistema = null;
 
-	Sistema sistema = Sistema.getInstancia();
+	@Before
+	public void setUp()
+	{
+		sistema = Sistema.getNewInstanceTest();
+	}
 
 	@Test
 	public void testGetInstancia()
+	{
+		Sistema.getInstancia();
+		Sistema sistema = Sistema.getInstancia();
+		Assert.assertEquals("El sistema no se creo correctamente", sistema, Sistema.getInstancia());
+	}
+
+	@Test
+	public void testGetInstanciaNull()
 	{
 		Sistema sistema = Sistema.getInstancia();
 		Assert.assertEquals("El sistema no se creo correctamente", sistema, Sistema.getInstancia());
@@ -141,7 +154,7 @@ public class TestSistema
 		sistema.agregarFacturas(persona);
 
 		sistema.duplicarFactura("Ricardo");
-		fail("No hay forma de comprobar que el metodo genera un clone de la facutra dado que no lo devuelve solo imprime en consola");
+		fail("No hay forma de comprobar que el metodo genera un clone de la factura dado que no lo devuelve solo imprime en consola");
 	}
 
 	@Test

@@ -16,11 +16,14 @@ import servicios.DomicilioCasa;
 
 public class TestSistemaEsenarioParaListarFacturas
 {
-	Sistema sistema = Sistema.getInstancia();
+	Sistema sistema = null;
 
 	@Before
 	public void setUp()
 	{
+
+		sistema = Sistema.getNewInstanceTest();
+
 		Persona persona = new Fisica("Flor", 15);
 		sistema.agregarFacturas(persona);
 		sistema.agregarServicio("Flor", "Internet100", 0, 0, 0, new DomicilioCasa("9 de julio", 500));
@@ -35,7 +38,6 @@ public class TestSistemaEsenarioParaListarFacturas
 	@Test
 	public void testListarFacturas()
 	{
-		Sistema sistema = Sistema.getInstancia();
 		System.out.println("------------" + sistema.listarFacturas());
 		Assert.assertEquals("No se realiza correctamente el listar facturas",
 				"FACTURAS:\n" + "Persona fisica Nombre= Flor DNI=15\n" + "Lista de contrataciones: \n"
