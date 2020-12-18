@@ -123,7 +123,7 @@ public class TestSistema
 		sistema.agregarServicio("Pedro", "Internet100", 0, 0, 0, domicilio);
 		sistema.modificarAgregado("Pedro", "Las Heras", "CAMBIAR", "Internet500");
 		Assert.assertEquals("No se cargo correctamente la persona", "Persona fisica Nombre= Pedro DNI=1010\n"
-				+ "ID: 6 Domicilio: Colon 1500 SERVICIO== INTERNET500: $1000 \n\n" + "-->PRECIO TOTAL: 1000.0\n\n",
+				+ "ID: 7 Domicilio: Colon 1500 SERVICIO== INTERNET500: $1000 \n\n" + "-->PRECIO TOTAL: 1000.0\n\n",
 				sistema.listarFactura("Pedro"));
 	}
 
@@ -209,26 +209,21 @@ public class TestSistema
 	@Test
 	public void testListarFacturas()
 	{
+		Sistema sistema = Sistema.getInstancia();
+		Persona persona = new Fisica("Rodrigo", 100);
+		Domicilio domicilio = new DomicilioCasa("Colon", 1500);
+		Domicilio domicilio2 = new DomicilioCasa("Luro", 1500);
+		sistema.agregarFacturas(persona);
+		sistema.agregarServicio("Rodrigo", "Internet100", 0, 0, 0, domicilio);
+		sistema.agregarServicio("Rodrigo", "Internet100", 0, 0, 0, domicilio2);
 
 		System.out.println("------------" + sistema.listarFacturas());
 		Assert.assertEquals("No se realiza correctamente el listar facturas",
-				"FACTURAS:\n" + "Persona fisica Nombre= Cacho DNI=1515\n" + "Lista de contrataciones: \n"
-						+ "ID: 8 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n" + "\n" + "\n"
-						+ "--> PRECIO TOTAL: 935.0000000000001\n" + "\n" + "Persona fisica Nombre= Marcos DNI=15\n"
-						+ "Lista de contrataciones: \n" + "\n" + "\n" + "--> PRECIO TOTAL: 0.0\n" + "\n"
-						+ "Persona fisica Nombre= Rodrigo DNI=100\n" + "Lista de contrataciones: \n"
-						+ "ID: 2 Domicilio: Luro 1500 SERVICIO== INTERNET100: $850 \n" + "\n" + "\n"
-						+ "--> PRECIO TOTAL: 850.0\n" + "\n" + "Persona fisica Nombre= Marcelo DNI=50314328\n"
-						+ "Lista de contrataciones: \n" + "ID: 5 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n"
-						+ "\n" + "\n" + "--> PRECIO TOTAL: 850.0\n" + "\n" + "Persona fisica Nombre= Matias DNI=1515\n"
-						+ "Lista de contrataciones: \n" + "ID: 6 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n"
-						+ "\n" + "\n" + "--> PRECIO TOTAL: 850.0\n" + "\n" + "Persona fisica Nombre= Pedro DNI=1010\n"
-						+ "Lista de contrataciones: \n" + "ID: 7 Domicilio: Colon 1500 SERVICIO== INTERNET500: $1000 \n"
-						+ "\n" + "\n" + "--> PRECIO TOTAL: 1000.0\n" + "\n" + "Persona fisica Nombre= Juan DNI=1515\n"
-						+ "Lista de contrataciones: \n" + "ID: 3 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n"
-						+ "ID: 4 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n" + "\n" + "\n"
-						+ "--> PRECIO TOTAL: 850.0\n" + "\n" + "Persona fisica Nombre= Jorge DNI=50314328\n"
-						+ "Lista de contrataciones: \n" + "\n" + "\n" + "--> PRECIO TOTAL: 0.0\n\n",
+				"FACTURAS:\n" + "Persona fisica Nombre= Rodrigo DNI=100\n" + "Lista de contrataciones: \n"
+						+ "ID: 2 Domicilio: Luro 1500 SERVICIO== INTERNET100: $850 \n"
+						+ "ID: 9 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n"
+						+ "ID: 10 Domicilio: Luro 1500 SERVICIO== INTERNET100: $850 \n" + "\n" + "\n"
+						+ "--> PRECIO TOTAL: 850.0\n\n",
 				sistema.listarFacturas());
 	}
 
