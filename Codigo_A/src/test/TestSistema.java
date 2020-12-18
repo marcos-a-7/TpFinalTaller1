@@ -141,7 +141,7 @@ public class TestSistema
 		sistema.abonar("Cacho", pago);
 		Assert.assertEquals("No se cargo el abonar correctamente",
 				"Persona fisica Nombre= Cacho DNI=1515\n"
-						+ "ID: 7 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n\n"
+						+ "ID: 8 Domicilio: Colon 1500 SERVICIO== INTERNET100: $850 \n\n"
 						+ "-->PRECIO TOTAL: 935.0000000000001\n\n",
 				sistema.listarFactura("Cacho"));
 	}
